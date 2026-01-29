@@ -1,0 +1,25 @@
+name: build-ankiaddon
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+  release:
+    types: [ created ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install zip
+        run: sudo apt-get update && sudo apt-get install -y zip
+      - name: Build .ankiaddon
+        run: |
+          zip -r ajpc-yomitran_dev.ankiaddon . \
+            -x ".git/*" ".github/*" "config.json" "__pycache__/*" "*.pyc" "*.pyo"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ajpc-yomitran_dev.ankiaddon
+          path: ajpc-yomitran_dev.ankiaddon
