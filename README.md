@@ -10,10 +10,11 @@ Anki add-on for converting imported Yomitan notes into your own vocabulary note 
 - Tag transform pipeline (mapping + drop list)
 - Auto-run after sync (optional) and manual run from the AJpC menu
 
-## Installation (local)
-1) Copy the folder to `Anki2/addons21/ajpc-yomitran_dev`.
-2) Restart Anki.
-3) Configure it via `Tools -> AJpC -> Yomitran Settings`.
+## Installation
+1) Download the latest `.ankiaddon` file from the repository releases/builds.
+2) In Anki, open the Add-ons dialog and choose "Install from file".
+3) Select the downloaded `.ankiaddon` and restart Anki.
+4) Configure it via `Tools -> AJpC -> Yomitran Settings`.
 
 ## Configuration
 - `config.json` is managed by Anki.

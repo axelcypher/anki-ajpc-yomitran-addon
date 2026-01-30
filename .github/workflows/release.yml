@@ -1,0 +1,101 @@
+name: AJpC Yomitran Release (Anki Add-on)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read version from version.py
+        id: ver
+        run: |
+          set -euo pipefail
+          VERSION="$(python - <<'PY'
+          import re, pathlib, sys
+          p = pathlib.Path("version.py")
+          s = p.read_text(encoding="utf-8")
+          m = re.search(r'__version__\s*=\s*["\']([^"\']+)["\']', s)
+          if not m:
+              print("ERROR: __version__ not found in version.py", file=sys.stderr)
+              sys.exit(1)
+          print(m.group(1))
+          PY
+          )"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Check if tag already exists
+        id: tagcheck
+        run: |
+          set -euo pipefail
+          TAG="${{ steps.ver.outputs.tag }}"
+          if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build .ankiaddon
+        if: steps.tagcheck.outputs.exists != 'true'
+        env:
+          ADDON_PACKAGE: ajpc_yomitran
+          ADDON_NAME: AJpC Yomitran - Transfer Yomitan Cards into Other Cards
+          VERSION: ${{ steps.ver.outputs.version }}
+          TAG: ${{ steps.ver.outputs.tag }}
+        run: |
+          set -euo pipefail
+          rm -rf dist build
+          mkdir -p "build"
+
+          rsync -a \
+            --exclude ".git" \
+            --exclude ".github" \
+            --exclude "dist" \
+            --exclude "build" \
+            --exclude "__pycache__" \
+            --exclude "meta.json" \
+            --exclude "config-example.json" \
+            --exclude "*.ankiaddon" \
+            ./ "build/"
+
+          if [ -f "build/config-example.json" ] && [ ! -f "build/config.json" ]; then
+            cp "build/config-example.json" "build/config.json"
+          fi
+
+          cat > build/manifest.json <<EOF
+          {
+            "package": "${ADDON_PACKAGE}",
+            "name": "${ADDON_NAME}",
+            "version": "${VERSION}"
+          }
+          EOF
+
+          mkdir -p dist
+          (cd build && zip -r "../dist/${ADDON_PACKAGE}-${TAG}.ankiaddon" .)
+
+      - name: Create tag + GitHub Release + upload asset
+        if: steps.tagcheck.outputs.exists != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          TAG="${{ steps.ver.outputs.tag }}"
+          ASSET="$(ls -1 dist/*.ankiaddon | head -n 1)"
+
+          git tag "$TAG"
+          git push origin "$TAG"
+
+          gh release create "$TAG" \
+            --title "$TAG" \
+            --notes "Release $TAG" \
+            "$ASSET"
