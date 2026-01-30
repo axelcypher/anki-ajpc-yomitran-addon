@@ -1,49 +1,95 @@
 # AJpC Yomitran
 
-Anki Add-on zum Umwandeln von importierten Yomitan-Notizen (JMDict German) in eigene Vokabel-Notetypen.
+Anki add-on for converting imported Yomitan notes into your own vocabulary note types.
 
 ## Features
-- POS-Erkennung (Verb/Adjektiv/Sonstige) und Zuweisung auf Ziel-Notetypen
-- Feldmapping pro POS-Kategorie mit Dropdown-Auswahl
-- Hepburn-Transliteration aus `VocabReading` (optional via `pykakasi`, sonst Fallback)
-- Tags: JMDict-Tags, Frequenz (`Freq::`), JLPT (`JLPT::N*`), interne Tracking-Tags
-- Automatisch nach Sync (abschaltbar) + manueller Start im AJpC-Menue
+- User-defined categories with filters to select the target note type
+- Per-category field mapping with dynamic source/virtual fields
+- Virtual fields (computed values) with multiple strategies
+- Hepburn conversion via `pykakasi`
+- Tag transform pipeline (mapping + drop list)
+- Auto-run after sync (optional) and manual run from the AJpC menu
 
-## Installation (lokal)
-1) Ordner nach `Anki2/addons21/ajpc-yomitran_dev` kopieren.
-2) Anki neu starten.
-3) In Anki unter `Tools -> AJpC -> Yomitan-Import Einstellungen` konfigurieren.
+## Installation (local)
+1) Copy the folder to `Anki2/addons21/ajpc-yomitran_dev`.
+2) Restart Anki.
+3) Configure it via `Tools -> AJpC -> Yomitran Settings`.
 
-## Konfiguration
-- `config.json` wird von Anki verwaltet (nicht versioniert)
-- Beispiel: `config.example.json`
+## Configuration
+- `config.json` is managed by Anki.
+- `config.example.json` shows the default schema.
 
-### Beispiel-Felder (Quelle)
-Quellfelder, die erwartet werden:
+### Setup tab
+Configure which source fields appear in the mapping dropdown and how they are labeled.
+You can also define virtual fields (computed values):
+- `copy`: copy a source field
+- `fallback`: use a primary field, fallback to another if empty
+- `to_hepburn`: convert a source field to Hepburn
+- `to_tag`: add the value as tags (not selectable in field mapping)
+- `note_link`: create a `[Label|nid123]` link to the source note
+
+### Categories
+Each category defines:
+- Name
+- Target note type
+- Filter (source field + values + match mode)
+- Field mapping for the target note type
+
+Categories are evaluated in order; the first matching category wins.
+
+### Tag transform
+The Tag Transform tab holds a JSON object with `mapping` and `drop` lists.
+Example:
+```
+{
+  "mapping": {
+    "v5m": "JMDict::v5m",
+    "vi": "JMDict::vi",
+    "vt": "JMDict::vt"
+  },
+  "drop": ["spec1", "spec2", "news1", "news2", "?", "?", "?", "??"]
+}
+```
+
+### Debug logging
+Enable debug logging in the settings dialog to write `ajpc-yomitran.log` into the add-on folder.
+
+## Source fields (typical)
+Examples of fields you might expose in the Setup tab:
 - Vocab, VocabReading, VocabFurigana, VocabAudio, POS
 - GlossaryJMDictGerHTML, GlossaryJitendexEndHTML, GlossaryFirst
 - SelectionText, Tags, FreqJPDB/FeqJPDB, FreqJLPT
 
-### Ziel-Felder (berechnet)
-- Vocab = VocabFurigana
-- VocabReading = VocabReading
-- VocabMeaning = SelectionText (Fallback GlossaryFirst)
-- VocabHepburn = Hepburn(VocabReading)
-- VocabAudio = VocabAudio
-- FamilyID = VocabFurigana
+## Virtual field defaults
+The default configuration ships with:
+- `VocabMeaning`: SelectionText -> GlossaryFirst
+- `VocabHepburn`: Hepburn(VocabReading)
+- `FamilyID`: copy of VocabFurigana
+- `SourceNoteLink`: link to the source note
+- `Vocab`: copy of VocabFurigana
+
+## Hepburn dependency
+This add-on uses `pykakasi` for proper Hepburn conversion.
+
+Install in Anki's Python environment:
+- Windows: `C:\Program Files\Anki\python.exe -m pip install pykakasi`
+- macOS: `/Applications/Anki.app/Contents/MacOS/python -m pip install pykakasi`
+- Linux: `anki -b <profile_path> --python -m pip install pykakasi`
+
+If `pykakasi` is missing, conversion will raise an error.
 
 ## Build (.ankiaddon)
-GitHub Actions Workflow erzeugt ein `.ankiaddon`-Artifact.
+GitHub Actions builds a `.ankiaddon` artifact.
 
-Lokaler Build (manuell):
+Manual build:
 ```
 zip -r ajpc-yomitran_dev.ankiaddon . -x ".git/*" ".github/*" "config.json" "__pycache__/*" "*.pyc" "*.pyo"
 ```
 
-## Hinweise
-- Die Ziel-Noten landen im aktuell aktiven Deck.
-- Tags aus dem Feld `Tags` werden als Anki-Tags uebernommen.
-- Interne Tags:
+## Notes
+- New notes are added to the currently active deck.
+- Tags from the source field `Tags` are transformed and applied.
+- Internal tags:
   - `_intern::yomitan_export`
   - `_intern::yomitan::processed`
-  - `_intern::yomitan::VOCAB_AUS_DEM_ES_STAMMT::<Vocab>::<NoteID>`
+  - `_intern::yomitan::<Vocab>::<NoteID>`
