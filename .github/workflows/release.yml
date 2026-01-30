@@ -2,7 +2,7 @@ name: AJpC Yomitran Release (Anki Add-on)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:
 
 permissions:
