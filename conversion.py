@@ -108,6 +108,7 @@ def _strip_noise_symbols(tag: str, drop: List[str]) -> str:
 
 def _transform_tags(raw_tags: List[str], cfg: Dict, source_note=None) -> List[str]:
     tcfg = cfg.get("tag_transform") or {}
+    prefix = _safe_tag_component(str(tcfg.get("prefix") or ""))
     mapping = tcfg.get("mapping") or {}
     drop = tcfg.get("drop") or []
     out = set()
@@ -124,7 +125,8 @@ def _transform_tags(raw_tags: List[str], cfg: Dict, source_note=None) -> List[st
             elif mapped:
                 out.add(mapped)
             continue
-        out.add(cleaned)
+        cleaned_safe = _safe_tag_component(cleaned)
+        out.add(f"{prefix}{cleaned_safe}" if prefix else cleaned_safe)
     result = sorted(out)
     _LOGGER.debug("Transformed tags: in=%s out=%s", raw_tags, result)
     return result

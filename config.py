@@ -420,6 +420,7 @@ DEFAULT_CONFIG = {
         "path": "ajpc-yomitran.log",
     },
     "tag_transform": {
+        "prefix": "",
         "mapping": TAG_MAPPING_DEFAULT,
         "drop": [
             "spec1",

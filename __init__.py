@@ -1,7 +1,6 @@
 import copy
 import json
 import os
-import re
 import subprocess
 import sys
 
@@ -9,17 +8,15 @@ from aqt import gui_hooks, mw
 from aqt.qt import QAction, QMessageBox
 from aqt.utils import tooltip
 
-from .config import DEFAULT_CONFIG, TAG_MAPPING_DEFAULT, merge_config
+from .config import DEFAULT_CONFIG
 from .conversion import convert_notes
 from .hepburn import is_available
 from .logging_utils import configure_logging, get_logger
 from .ui import ConfigDialog
 
-ADDON_NAME = mw.addonManager.addonFromModule(__name__) or __name__
 _RUNNING = False
 _CONFIG_CACHE = None
 _LOGGER = get_logger()
-_ROMAJI_SUFFIX_RE = re.compile(r"(Godan|Nidan|Yodan)-[A-Za-z/]+")
 
 
 def _migrate_config(cfg: dict) -> bool:
@@ -66,22 +63,58 @@ def _migrate_config(cfg: dict) -> bool:
     return changed
 
 
+def _read_local_config() -> dict:
+    path = os.path.join(os.path.dirname(__file__), "config.json")
+    if not os.path.exists(path):
+        return copy.deepcopy(DEFAULT_CONFIG)
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        _LOGGER.exception("Failed to read config.json")
+        return copy.deepcopy(DEFAULT_CONFIG)
+
+
+def _merge_defaults(default: dict, custom: dict) -> dict:
+    if not isinstance(custom, dict):
+        return copy.deepcopy(default)
+    merged = copy.deepcopy(default)
+    for key, value in custom.items():
+        if key == "tag_transform":
+            tcfg = value if isinstance(value, dict) else {}
+            merged_t = {}
+            if "prefix" in tcfg:
+                merged_t["prefix"] = tcfg.get("prefix", "")
+            else:
+                merged_t["prefix"] = default.get("tag_transform", {}).get("prefix", "")
+            if "mapping" in tcfg:
+                merged_t["mapping"] = tcfg.get("mapping") or {}
+            else:
+                merged_t["mapping"] = default.get("tag_transform", {}).get("mapping", {})
+            if "drop" in tcfg:
+                merged_t["drop"] = tcfg.get("drop") or []
+            else:
+                merged_t["drop"] = default.get("tag_transform", {}).get("drop", [])
+            merged["tag_transform"] = merged_t
+            continue
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = _merge_defaults(merged[key], value)
+        else:
+            merged[key] = value
+    return merged
+
+
 def get_config():
     global _CONFIG_CACHE
-    cfg = mw.addonManager.getConfig(ADDON_NAME) or {}
-    changed = False
+    cfg = _read_local_config()
     tags_cfg = cfg.get("tags") or {}
     if tags_cfg.get("link_tag_prefix") == "_intern::yomitan::VOCAB_AUS_DEM_ES_STAMMT":
         tags_cfg["link_tag_prefix"] = "_intern::yomitan"
         cfg["tags"] = tags_cfg
-        changed = True
+        _write_local_config(cfg)
     if _migrate_config(cfg):
-        changed = True
-    if _normalize_tag_mapping(cfg):
-        changed = True
-    merged = merge_config(DEFAULT_CONFIG, cfg)
-    if changed or merged != cfg:
-        mw.addonManager.writeConfig(ADDON_NAME, merged)
+        _write_local_config(cfg)
+    merged = _merge_defaults(DEFAULT_CONFIG, cfg)
     _CONFIG_CACHE = merged
     configure_logging(_CONFIG_CACHE)
     return merged
@@ -89,7 +122,6 @@ def get_config():
 
 def save_config(cfg):
     global _CONFIG_CACHE
-    mw.addonManager.writeConfig(ADDON_NAME, cfg)
     _write_local_config(cfg)
     _CONFIG_CACHE = cfg
     configure_logging(_CONFIG_CACHE)
@@ -215,25 +247,6 @@ def _write_local_config(cfg: dict):
     except Exception:
         _LOGGER.exception("Failed to write config.json")
 
-
-def _normalize_tag_mapping(cfg: dict) -> bool:
-    tcfg = cfg.get("tag_transform") or {}
-    mapping = tcfg.get("mapping")
-    if not isinstance(mapping, dict):
-        return False
-    changed = False
-    for key, default_val in TAG_MAPPING_DEFAULT.items():
-        cur = mapping.get(key)
-        if not isinstance(cur, str):
-            continue
-        if "?" in cur or _ROMAJI_SUFFIX_RE.search(cur) or any(bad in cur for bad in ("Ã", "ã", "â")):
-            mapping[key] = default_val
-            changed = True
-    if changed:
-        tcfg["mapping"] = mapping
-        cfg["tag_transform"] = tcfg
-        _LOGGER.info("Normalized tag mapping values")
-    return changed
 
 
 get_config()
