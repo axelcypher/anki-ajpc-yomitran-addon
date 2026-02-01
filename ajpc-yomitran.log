@@ -1329,3 +1329,276 @@
 2026-01-31 21:19:28,291 | INFO | Debug logging enabled
 2026-01-31 21:19:28,295 | INFO | Debug logging enabled
 2026-01-31 21:19:28,295 | DEBUG | pykakasi already available
+2026-01-31 21:46:46,119 | INFO | Debug logging enabled
+2026-01-31 21:46:46,121 | INFO | Debug logging enabled
+2026-01-31 21:46:46,123 | INFO | Debug logging enabled
+2026-01-31 21:46:46,125 | INFO | Debug logging enabled
+2026-01-31 21:46:46,127 | INFO | Debug logging enabled
+2026-01-31 21:46:46,127 | DEBUG | Registered menu actions via AJpC hook
+2026-01-31 21:46:46,597 | INFO | Debug logging enabled
+2026-01-31 21:46:46,600 | INFO | Debug logging enabled
+2026-01-31 21:46:46,600 | DEBUG | pykakasi already available
+2026-01-31 21:57:32,456 | INFO | Debug logging enabled
+2026-01-31 21:57:32,458 | INFO | Debug logging enabled
+2026-01-31 21:57:32,459 | INFO | Debug logging enabled
+2026-01-31 21:57:32,461 | INFO | Debug logging enabled
+2026-01-31 21:57:32,463 | INFO | Debug logging enabled
+2026-01-31 21:57:32,463 | DEBUG | Registered menu actions via AJpC hook
+2026-01-31 21:57:32,903 | INFO | Debug logging enabled
+2026-01-31 21:57:32,906 | INFO | Debug logging enabled
+2026-01-31 21:57:32,906 | DEBUG | pykakasi already available
+2026-01-31 22:05:53,182 | INFO | Debug logging enabled
+2026-01-31 22:05:53,184 | INFO | Debug logging enabled
+2026-01-31 22:05:53,186 | INFO | Debug logging enabled
+2026-01-31 22:05:53,188 | INFO | Debug logging enabled
+2026-01-31 22:05:53,191 | INFO | Debug logging enabled
+2026-01-31 22:05:53,191 | DEBUG | Registered menu actions via AJpC hook
+2026-01-31 22:05:53,515 | INFO | Debug logging enabled
+2026-01-31 22:05:53,519 | INFO | Debug logging enabled
+2026-01-31 22:05:53,520 | DEBUG | pykakasi already available
+2026-01-31 22:15:24,188 | INFO | Debug logging enabled
+2026-01-31 22:15:24,189 | INFO | Debug logging enabled
+2026-01-31 22:15:24,191 | INFO | Debug logging enabled
+2026-01-31 22:15:24,192 | INFO | Debug logging enabled
+2026-01-31 22:15:24,194 | INFO | Debug logging enabled
+2026-01-31 22:15:24,194 | DEBUG | Registered menu actions via AJpC hook
+2026-01-31 22:15:24,476 | INFO | Debug logging enabled
+2026-01-31 22:15:24,479 | INFO | Debug logging enabled
+2026-01-31 22:15:24,479 | DEBUG | pykakasi already available
+2026-01-31 22:20:55,463 | INFO | Debug logging enabled
+2026-01-31 22:20:55,465 | INFO | Debug logging enabled
+2026-01-31 22:20:55,466 | INFO | Debug logging enabled
+2026-01-31 22:20:55,468 | INFO | Debug logging enabled
+2026-01-31 22:20:55,469 | INFO | Debug logging enabled
+2026-01-31 22:20:55,470 | DEBUG | Registered menu actions via AJpC hook
+2026-01-31 22:20:55,746 | INFO | Debug logging enabled
+2026-01-31 22:20:55,748 | INFO | Debug logging enabled
+2026-01-31 22:20:55,748 | DEBUG | pykakasi already available
+2026-01-31 22:24:20,353 | INFO | Debug logging enabled
+2026-01-31 22:24:20,355 | INFO | Debug logging enabled
+2026-01-31 22:24:20,356 | INFO | Debug logging enabled
+2026-01-31 22:24:20,358 | INFO | Debug logging enabled
+2026-01-31 22:24:20,360 | INFO | Debug logging enabled
+2026-01-31 22:24:20,360 | DEBUG | Registered menu actions via AJpC hook
+2026-01-31 22:24:20,637 | INFO | Debug logging enabled
+2026-01-31 22:24:20,640 | INFO | Debug logging enabled
+2026-01-31 22:24:20,640 | DEBUG | pykakasi already available
+2026-01-31 22:31:03,740 | INFO | Debug logging enabled
+2026-01-31 22:31:03,742 | INFO | Debug logging enabled
+2026-01-31 22:31:03,743 | INFO | Debug logging enabled
+2026-01-31 22:31:03,745 | INFO | Debug logging enabled
+2026-01-31 22:31:03,747 | INFO | Debug logging enabled
+2026-01-31 22:31:03,747 | DEBUG | Registered menu actions via AJpC hook
+2026-01-31 22:31:04,044 | INFO | Debug logging enabled
+2026-01-31 22:31:04,047 | INFO | Debug logging enabled
+2026-01-31 22:31:04,048 | DEBUG | pykakasi already available
+2026-01-31 23:05:06,187 | INFO | Debug logging enabled
+2026-01-31 23:05:06,189 | INFO | Debug logging enabled
+2026-01-31 23:05:06,191 | INFO | Debug logging enabled
+2026-01-31 23:05:06,192 | INFO | Debug logging enabled
+2026-01-31 23:05:06,194 | INFO | Debug logging enabled
+2026-01-31 23:05:06,194 | DEBUG | Registered menu actions via AJpC hook
+2026-01-31 23:05:06,496 | INFO | Debug logging enabled
+2026-01-31 23:05:06,499 | INFO | Debug logging enabled
+2026-01-31 23:05:06,499 | DEBUG | pykakasi already available
+2026-01-31 23:36:24,088 | INFO | Debug logging enabled
+2026-01-31 23:36:24,090 | INFO | Debug logging enabled
+2026-01-31 23:36:24,091 | INFO | Debug logging enabled
+2026-01-31 23:36:24,093 | INFO | Debug logging enabled
+2026-01-31 23:36:24,094 | INFO | Debug logging enabled
+2026-01-31 23:36:24,094 | DEBUG | Registered menu actions via AJpC hook
+2026-01-31 23:36:24,392 | INFO | Debug logging enabled
+2026-01-31 23:36:24,394 | INFO | Debug logging enabled
+2026-01-31 23:36:24,395 | DEBUG | pykakasi already available
+2026-01-31 23:50:26,607 | INFO | Debug logging enabled
+2026-01-31 23:50:26,608 | INFO | Debug logging enabled
+2026-01-31 23:50:26,609 | INFO | Debug logging enabled
+2026-01-31 23:50:26,611 | INFO | Debug logging enabled
+2026-01-31 23:50:26,612 | INFO | Debug logging enabled
+2026-01-31 23:50:26,612 | DEBUG | Registered menu actions via AJpC hook
+2026-01-31 23:50:26,896 | INFO | Debug logging enabled
+2026-01-31 23:50:26,899 | INFO | Debug logging enabled
+2026-01-31 23:50:26,899 | DEBUG | pykakasi already available
+2026-01-31 23:59:54,065 | INFO | Debug logging enabled
+2026-01-31 23:59:54,067 | INFO | Debug logging enabled
+2026-01-31 23:59:54,068 | INFO | Debug logging enabled
+2026-01-31 23:59:54,070 | INFO | Debug logging enabled
+2026-01-31 23:59:54,071 | INFO | Debug logging enabled
+2026-01-31 23:59:54,072 | DEBUG | Registered menu actions via AJpC hook
+2026-01-31 23:59:54,360 | INFO | Debug logging enabled
+2026-01-31 23:59:54,363 | INFO | Debug logging enabled
+2026-01-31 23:59:54,364 | DEBUG | pykakasi already available
+2026-02-01 00:10:31,726 | INFO | Debug logging enabled
+2026-02-01 00:10:31,728 | INFO | Debug logging enabled
+2026-02-01 00:10:31,730 | INFO | Debug logging enabled
+2026-02-01 00:10:31,731 | INFO | Debug logging enabled
+2026-02-01 00:10:31,732 | INFO | Debug logging enabled
+2026-02-01 00:10:31,733 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 00:10:32,042 | INFO | Debug logging enabled
+2026-02-01 00:10:32,045 | INFO | Debug logging enabled
+2026-02-01 00:10:32,046 | DEBUG | pykakasi already available
+2026-02-01 01:01:15,331 | INFO | Debug logging enabled
+2026-02-01 01:01:15,331 | INFO | Auto conversion after sync
+2026-02-01 01:01:15,332 | INFO | Conversion started (manual=False)
+2026-02-01 01:01:15,333 | INFO | Debug logging enabled
+2026-02-01 01:01:15,334 | INFO | Starting conversion for source types: [1769367768468]
+2026-02-01 01:01:15,340 | DEBUG | Found 0 source notes for model '🇯🇵 | Yomitan Import'
+2026-02-01 01:01:15,340 | INFO | Conversion done. created=0 skipped=0
+2026-02-01 01:01:15,340 | INFO | Conversion finished
+2026-02-01 01:01:29,106 | INFO | Debug logging enabled
+2026-02-01 01:01:29,108 | INFO | Debug logging enabled
+2026-02-01 01:01:29,109 | INFO | Debug logging enabled
+2026-02-01 01:01:29,111 | INFO | Debug logging enabled
+2026-02-01 01:01:29,112 | INFO | Debug logging enabled
+2026-02-01 01:01:29,112 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 01:01:29,392 | INFO | Debug logging enabled
+2026-02-01 01:01:29,395 | INFO | Debug logging enabled
+2026-02-01 01:01:29,396 | DEBUG | pykakasi already available
+2026-02-01 01:09:03,397 | INFO | Debug logging enabled
+2026-02-01 01:09:03,398 | INFO | Debug logging enabled
+2026-02-01 01:09:03,400 | INFO | Debug logging enabled
+2026-02-01 01:09:03,401 | INFO | Debug logging enabled
+2026-02-01 01:09:03,403 | INFO | Debug logging enabled
+2026-02-01 01:09:03,403 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 01:09:03,673 | INFO | Debug logging enabled
+2026-02-01 01:09:03,676 | INFO | Debug logging enabled
+2026-02-01 01:09:03,676 | DEBUG | pykakasi already available
+2026-02-01 01:15:55,498 | INFO | Debug logging enabled
+2026-02-01 01:15:55,500 | INFO | Debug logging enabled
+2026-02-01 01:15:55,501 | INFO | Debug logging enabled
+2026-02-01 01:15:55,503 | INFO | Debug logging enabled
+2026-02-01 01:15:55,504 | INFO | Debug logging enabled
+2026-02-01 01:15:55,504 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 01:15:55,778 | INFO | Debug logging enabled
+2026-02-01 01:15:55,780 | INFO | Debug logging enabled
+2026-02-01 01:15:55,780 | DEBUG | pykakasi already available
+2026-02-01 01:16:50,452 | INFO | Debug logging enabled
+2026-02-01 01:16:50,454 | INFO | Debug logging enabled
+2026-02-01 01:16:50,455 | INFO | Debug logging enabled
+2026-02-01 01:16:50,456 | INFO | Debug logging enabled
+2026-02-01 01:16:50,458 | INFO | Debug logging enabled
+2026-02-01 01:16:50,458 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 01:16:50,729 | INFO | Debug logging enabled
+2026-02-01 01:16:50,732 | INFO | Debug logging enabled
+2026-02-01 01:16:50,732 | DEBUG | pykakasi already available
+2026-02-01 01:20:23,039 | INFO | Debug logging enabled
+2026-02-01 01:20:23,040 | INFO | Debug logging enabled
+2026-02-01 01:20:23,041 | INFO | Debug logging enabled
+2026-02-01 01:20:23,043 | INFO | Debug logging enabled
+2026-02-01 01:20:23,044 | INFO | Debug logging enabled
+2026-02-01 01:20:23,044 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 01:20:23,319 | INFO | Debug logging enabled
+2026-02-01 01:20:23,322 | INFO | Debug logging enabled
+2026-02-01 01:20:23,322 | DEBUG | pykakasi already available
+2026-02-01 01:54:26,703 | INFO | Debug logging enabled
+2026-02-01 01:54:26,705 | INFO | Debug logging enabled
+2026-02-01 01:54:26,706 | INFO | Debug logging enabled
+2026-02-01 01:54:26,707 | INFO | Debug logging enabled
+2026-02-01 01:54:26,709 | INFO | Debug logging enabled
+2026-02-01 01:54:26,709 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 01:54:27,000 | INFO | Debug logging enabled
+2026-02-01 01:54:27,002 | INFO | Debug logging enabled
+2026-02-01 01:54:27,003 | DEBUG | pykakasi already available
+2026-02-01 02:08:36,672 | INFO | Debug logging enabled
+2026-02-01 02:08:36,674 | INFO | Debug logging enabled
+2026-02-01 02:08:36,675 | INFO | Debug logging enabled
+2026-02-01 02:08:36,677 | INFO | Debug logging enabled
+2026-02-01 02:08:36,678 | INFO | Debug logging enabled
+2026-02-01 02:08:36,678 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 02:08:36,967 | INFO | Debug logging enabled
+2026-02-01 02:08:36,969 | INFO | Debug logging enabled
+2026-02-01 02:08:36,969 | DEBUG | pykakasi already available
+2026-02-01 02:17:43,618 | INFO | Debug logging enabled
+2026-02-01 02:17:43,620 | INFO | Debug logging enabled
+2026-02-01 02:17:43,621 | INFO | Debug logging enabled
+2026-02-01 02:17:43,623 | INFO | Debug logging enabled
+2026-02-01 02:17:43,624 | INFO | Debug logging enabled
+2026-02-01 02:17:43,624 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 02:17:43,910 | INFO | Debug logging enabled
+2026-02-01 02:17:43,913 | INFO | Debug logging enabled
+2026-02-01 02:17:43,913 | DEBUG | pykakasi already available
+2026-02-01 02:24:11,059 | INFO | Debug logging enabled
+2026-02-01 02:24:11,061 | INFO | Debug logging enabled
+2026-02-01 02:24:11,062 | INFO | Debug logging enabled
+2026-02-01 02:24:11,064 | INFO | Debug logging enabled
+2026-02-01 02:24:11,066 | INFO | Debug logging enabled
+2026-02-01 02:24:11,066 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 02:24:11,355 | INFO | Debug logging enabled
+2026-02-01 02:24:11,358 | INFO | Debug logging enabled
+2026-02-01 02:24:11,358 | DEBUG | pykakasi already available
+2026-02-01 02:33:02,707 | INFO | Debug logging enabled
+2026-02-01 02:33:02,709 | INFO | Debug logging enabled
+2026-02-01 02:33:02,710 | INFO | Debug logging enabled
+2026-02-01 02:33:02,712 | INFO | Debug logging enabled
+2026-02-01 02:33:02,713 | INFO | Debug logging enabled
+2026-02-01 02:33:02,713 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 02:33:03,006 | INFO | Debug logging enabled
+2026-02-01 02:33:03,008 | INFO | Debug logging enabled
+2026-02-01 02:33:03,008 | DEBUG | pykakasi already available
+2026-02-01 02:37:52,180 | INFO | Debug logging enabled
+2026-02-01 02:37:52,182 | INFO | Debug logging enabled
+2026-02-01 02:37:52,184 | INFO | Debug logging enabled
+2026-02-01 02:37:52,185 | INFO | Debug logging enabled
+2026-02-01 02:37:52,187 | INFO | Debug logging enabled
+2026-02-01 02:37:52,187 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 02:37:52,471 | INFO | Debug logging enabled
+2026-02-01 02:37:52,473 | INFO | Debug logging enabled
+2026-02-01 02:37:52,474 | DEBUG | pykakasi already available
+2026-02-01 02:43:37,941 | INFO | Debug logging enabled
+2026-02-01 02:43:37,941 | INFO | Auto conversion after sync
+2026-02-01 02:43:37,941 | INFO | Conversion started (manual=False)
+2026-02-01 02:43:37,943 | INFO | Debug logging enabled
+2026-02-01 02:43:37,943 | INFO | Starting conversion for source types: [1769367768468]
+2026-02-01 02:43:37,949 | DEBUG | Found 1 source notes for model '🇯🇵 | Yomitan Import'
+2026-02-01 02:43:38,168 | DEBUG | Transformed tags: in=['⭐', 'ichi', 'news9k', 'n', 'priority', 'form', '★'] out=['JPN::Stil::formal/literarisch', 'JPN::Tags::unmapped::news9', 'JPN::Wortart::Nomen']
+2026-02-01 02:43:38,169 | DEBUG | Collected tags for note 1769910214630: ['Freq::19834', 'JLPT::N5', 'JPN::Stil::formal/literarisch', 'JPN::Tags::unmapped::news9', 'JPN::Wortart::Nomen', '_intern::yomitan::豚肉ぶたにく::1769910214630', '_intern::yomitan_export']
+2026-02-01 02:43:38,258 | DEBUG | Linked new note 1769910218254 into source note 1769910214630 field LinkedNotes
+2026-02-01 02:43:38,266 | INFO | Conversion done. created=1 skipped=0
+2026-02-01 02:43:38,266 | INFO | Conversion finished
+2026-02-01 02:46:52,543 | INFO | Debug logging enabled
+2026-02-01 02:46:52,545 | INFO | Debug logging enabled
+2026-02-01 02:46:52,546 | INFO | Debug logging enabled
+2026-02-01 02:46:52,547 | INFO | Debug logging enabled
+2026-02-01 02:46:52,549 | INFO | Debug logging enabled
+2026-02-01 02:46:52,549 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 02:46:52,821 | INFO | Debug logging enabled
+2026-02-01 02:46:52,824 | INFO | Debug logging enabled
+2026-02-01 02:46:52,824 | DEBUG | pykakasi already available
+2026-02-01 02:49:20,583 | INFO | Debug logging enabled
+2026-02-01 02:49:20,583 | INFO | Auto conversion after sync
+2026-02-01 02:49:20,583 | INFO | Conversion started (manual=False)
+2026-02-01 02:49:20,585 | INFO | Debug logging enabled
+2026-02-01 02:49:20,585 | INFO | Starting conversion for source types: [1769367768468]
+2026-02-01 02:49:20,591 | DEBUG | Found 1 source notes for model '🇯🇵 | Yomitan Import'
+2026-02-01 02:49:20,751 | DEBUG | Transformed tags: in=['⭐', 'ichi', 'news2k', 'n', 'priority', 'form', '★'] out=['JPN::Stil::formal/literarisch', 'JPN::Wortart::Nomen']
+2026-02-01 02:49:20,751 | DEBUG | Collected tags for note 1769910557033: ['Freq::1707', 'JLPT::N5', 'JPN::Stil::formal/literarisch', 'JPN::Wortart::Nomen', '_intern::yomitan::鳥とり::1769910557033', '_intern::yomitan_export']
+2026-02-01 02:49:20,958 | DEBUG | Linked new note 1769910560956 into source note 1769910557033 field LinkedNotes
+2026-02-01 02:49:20,960 | INFO | Conversion done. created=1 skipped=0
+2026-02-01 02:49:20,961 | INFO | Conversion finished
+2026-02-01 02:55:15,565 | INFO | Debug logging enabled
+2026-02-01 02:55:15,567 | INFO | Debug logging enabled
+2026-02-01 02:55:15,568 | INFO | Debug logging enabled
+2026-02-01 02:55:15,570 | INFO | Debug logging enabled
+2026-02-01 02:55:15,571 | INFO | Debug logging enabled
+2026-02-01 02:55:15,571 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 02:55:15,853 | INFO | Debug logging enabled
+2026-02-01 02:55:15,855 | INFO | Debug logging enabled
+2026-02-01 02:55:15,855 | DEBUG | pykakasi already available
+2026-02-01 02:59:55,473 | INFO | Debug logging enabled
+2026-02-01 02:59:55,475 | INFO | Debug logging enabled
+2026-02-01 02:59:55,476 | INFO | Debug logging enabled
+2026-02-01 02:59:55,478 | INFO | Debug logging enabled
+2026-02-01 02:59:55,480 | INFO | Debug logging enabled
+2026-02-01 02:59:55,480 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 02:59:55,759 | INFO | Debug logging enabled
+2026-02-01 02:59:55,762 | INFO | Debug logging enabled
+2026-02-01 02:59:55,762 | DEBUG | pykakasi already available
+2026-02-01 03:00:51,237 | INFO | Debug logging enabled
+2026-02-01 03:00:51,239 | INFO | Debug logging enabled
+2026-02-01 03:00:51,240 | INFO | Debug logging enabled
+2026-02-01 03:00:51,242 | INFO | Debug logging enabled
+2026-02-01 03:00:51,243 | INFO | Debug logging enabled
+2026-02-01 03:00:51,243 | DEBUG | Registered menu actions via AJpC hook
+2026-02-01 03:00:51,522 | INFO | Debug logging enabled
+2026-02-01 03:00:51,524 | INFO | Debug logging enabled
+2026-02-01 03:00:51,524 | DEBUG | pykakasi already available
