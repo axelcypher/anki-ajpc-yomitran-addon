@@ -249,11 +249,22 @@ def _init_onigiri_sidebar():
         return
 
     try:
+        # Load the bundled SVG icon (if present) for the sidebar entry.
+        icon_svg = ""
+        icon_path = os.path.join(os.path.dirname(__file__), "yomitan-icon.svg")
+        if os.path.exists(icon_path):
+            try:
+                with open(icon_path, "r", encoding="utf-8") as f:
+                    icon_svg = f.read()
+            except Exception:
+                _LOGGER.exception("Failed to read yomitan-icon.svg")
+
         # Provide a sidebar entry that triggers a pycmd we handle below.
         Onigiri.register_sidebar_action(
             entry_id="ajpc-yomitran.settings",
             label="Yomitran Settings",
             command="ajpc_yomitran_open_settings",
+            icon_svg=icon_svg,
         )
 
         def _on_js(handled, cmd, context):

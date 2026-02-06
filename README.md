@@ -2,6 +2,8 @@
 
 Anki add-on for converting imported Yomitan notes into your own vocabulary note types.
 
+Note: This project is not affiliated with or endorsed by Yomitan.
+
 ## Features
 - User-defined categories with filters to select the target note type
 - Per-category field mapping with dynamic source/virtual fields
