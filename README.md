@@ -48,7 +48,7 @@ Example:
     "vi": "JMDict::vi",
     "vt": "JMDict::vt"
   },
-  "drop": ["spec1", "spec2", "news1", "news2", "?", "?", "?", "??"]
+  "drop": ["spec1", "spec2", "news1", "news2"]
 }
 ```
 
@@ -70,14 +70,10 @@ The default configuration ships with:
 - `Vocab`: copy of VocabFurigana
 
 ## Hepburn dependency
-This add-on uses `pykakasi` for proper Hepburn conversion.
+This add-on bundles `pykakasi` and its dependencies, so no manual installation is required.
+The vendored packages live in `vendor/`.
 
-Install in Anki's Python environment:
-- Windows: `C:\Program Files\Anki\python.exe -m pip install pykakasi`
-- macOS: `/Applications/Anki.app/Contents/MacOS/python -m pip install pykakasi`
-- Linux: `anki -b <profile_path> --python -m pip install pykakasi`
-
-If `pykakasi` is missing, conversion will raise an error.
+If the vendored copy is missing or broken, conversion will raise an error.
 
 ## Build (.ankiaddon)
 GitHub Actions builds a `.ankiaddon` artifact.
@@ -94,3 +90,7 @@ zip -r ajpc-yomitran_dev.ankiaddon . -x ".git/*" ".github/*" "config.json" "__py
   - `_intern::yomitan_export`
   - `_intern::yomitan::processed`
   - `_intern::yomitan::<Vocab>::<NoteID>`
+
+## Licensing
+This project is distributed under GPLv3 (see `LICENSE`).
+Third-party license texts are included under `third_party/` and summarized in `THIRD_PARTY_NOTICES.md`.

@@ -1,33 +1,44 @@
 import copy
 import json
 import os
-import subprocess
-import sys
 
 from aqt import gui_hooks, mw
 from aqt.qt import QAction, QMessageBox
 from aqt.utils import tooltip
 
+# Default configuration schema for the add-on.
 from .config import DEFAULT_CONFIG
+# Main conversion pipeline (Yomitan -> target note type).
 from .conversion import convert_notes
+# Hepburn conversion availability check (bundled pykakasi).
 from .hepburn import is_available
+# Logging helpers for consistent diagnostics.
 from .logging_utils import configure_logging, get_logger
+# Settings dialog UI.
 from .ui import ConfigDialog
 
+# Prevent overlapping conversions.
 _RUNNING = False
+# Cache merged config for fast access.
 _CONFIG_CACHE = None
+# Module logger instance.
 _LOGGER = get_logger()
+# Track whether the Onigiri sidebar hook is already registered.
+_SIDEBAR_HOOKED = False
 
 
 def _migrate_config(cfg: dict) -> bool:
+    # Apply one-way migrations for legacy config keys/structures.
     changed = False
 
+    # Migrate legacy "source_note_type_ids" into singular field.
     if cfg.get("source_note_type_id") is None:
         legacy = cfg.get("source_note_type_ids") or []
         if legacy:
             cfg["source_note_type_id"] = legacy[0]
             changed = True
 
+    # Migrate older POS mappings into the newer "categories" schema.
     if not cfg.get("categories"):
         pos = cfg.get("pos_mappings") or {}
         if isinstance(pos, dict) and pos:
@@ -51,10 +62,12 @@ def _migrate_config(cfg: dict) -> bool:
             cfg["categories"] = categories
             changed = True
 
+    # Drop deprecated key after migration.
     if "pos_mappings" in cfg:
         cfg.pop("pos_mappings", None)
         changed = True
 
+    # Ensure newly introduced keys exist.
     for key in ("source_fields", "virtual_fields"):
         if key not in cfg:
             cfg[key] = copy.deepcopy(DEFAULT_CONFIG.get(key))
@@ -64,6 +77,7 @@ def _migrate_config(cfg: dict) -> bool:
 
 
 def _read_local_config() -> dict:
+    # Read the local JSON config, falling back to defaults if missing or invalid.
     path = os.path.join(os.path.dirname(__file__), "config.json")
     if not os.path.exists(path):
         return copy.deepcopy(DEFAULT_CONFIG)
@@ -76,10 +90,12 @@ def _read_local_config() -> dict:
 
 
 def _merge_defaults(default: dict, custom: dict) -> dict:
+    # Merge a custom config into defaults with special handling for tag_transform.
     if not isinstance(custom, dict):
         return copy.deepcopy(default)
     merged = copy.deepcopy(default)
     for key, value in custom.items():
+        # tag_transform must be merged field-by-field to preserve defaults.
         if key == "tag_transform":
             tcfg = value if isinstance(value, dict) else {}
             merged_t = {}
@@ -105,15 +121,19 @@ def _merge_defaults(default: dict, custom: dict) -> dict:
 
 
 def get_config():
+    # Load config, migrate legacy formats, merge with defaults, and configure logging.
     global _CONFIG_CACHE
     cfg = _read_local_config()
     tags_cfg = cfg.get("tags") or {}
+    # Backwards-compat fix for a legacy tag prefix.
     if tags_cfg.get("link_tag_prefix") == "_intern::yomitan::VOCAB_AUS_DEM_ES_STAMMT":
         tags_cfg["link_tag_prefix"] = "_intern::yomitan"
         cfg["tags"] = tags_cfg
         _write_local_config(cfg)
+    # Apply migrations and persist if anything changed.
     if _migrate_config(cfg):
         _write_local_config(cfg)
+    # Merge config with defaults and cache for reuse.
     merged = _merge_defaults(DEFAULT_CONFIG, cfg)
     _CONFIG_CACHE = merged
     configure_logging(_CONFIG_CACHE)
@@ -121,6 +141,7 @@ def get_config():
 
 
 def save_config(cfg):
+    # Persist config changes and refresh logging.
     global _CONFIG_CACHE
     _write_local_config(cfg)
     _CONFIG_CACHE = cfg
@@ -129,6 +150,7 @@ def save_config(cfg):
 
 
 def open_config():
+    # Open the settings dialog with the current config.
     _LOGGER.info("Opening settings dialog")
     cfg = get_config()
     dlg = ConfigDialog(cfg, save_config, mw)
@@ -136,6 +158,7 @@ def open_config():
 
 
 def run_conversion(manual: bool):
+    # Run the conversion pipeline, guarded against re-entrancy.
     global _RUNNING
     if _RUNNING:
         return
@@ -152,6 +175,7 @@ def run_conversion(manual: bool):
 
 
 def on_sync(*_):
+    # Auto-run after sync if enabled.
     cfg = get_config()
     if cfg.get("auto_on_sync"):
         _LOGGER.info("Auto conversion after sync")
@@ -159,15 +183,18 @@ def on_sync(*_):
 
 
 def _menu_enabled() -> bool:
+    # Enable/disable menu entries based on the "enabled" setting.
     cfg = get_config()
     return bool(cfg.get("enabled", True))
 
 
 def init_menu():
+    # Register actions in the AJpC menu hook if present, else fall back to menubar.
     api = getattr(mw, "_ajpc_menu_api", None)
     if isinstance(api, dict):
         register = api.get("register")
         if callable(register):
+            # Preferred: register into the shared AJpC hook.
             register(
                 kind="run",
                 label="Run Yomitran",
@@ -184,6 +211,7 @@ def init_menu():
             _LOGGER.debug("Registered menu actions via AJpC hook")
             return
 
+    # Fallback: create/use a local AJpC menu in the menubar.
     menu = None
     for action in mw.form.menubar.actions():
         if action.text().replace("&", "") == "AJpC":
@@ -192,6 +220,7 @@ def init_menu():
     if menu is None:
         menu = mw.form.menubar.addMenu("AJpC")
 
+    # Avoid duplicate entries if the menu already contains these actions.
     existing = {a.text().replace("&", "") for a in menu.actions()}
     if "Run Yomitran" not in existing:
         menu.addSeparator()
@@ -207,38 +236,44 @@ def init_menu():
         _LOGGER.debug("Added menu action: Yomitran Settings")
 
 
-def _prompt_pykakasi_install():
-    if is_available():
-        _LOGGER.debug("pykakasi already available")
+def _init_onigiri_sidebar():
+    # Register a sidebar action in Onigiri (if available) so Settings can be opened from the sidebar.
+    global _SIDEBAR_HOOKED
+    if _SIDEBAR_HOOKED:
         return
-
-    box = QMessageBox(mw)
-    box.setWindowTitle("pykakasi missing")
-    box.setText("pykakasi is required for proper Hepburn conversion.")
-    box.setInformativeText("Install now? (Anki may need a restart)")
-    install_btn = box.addButton("Install pykakasi", QMessageBox.ButtonRole.AcceptRole)
-    decline_btn = box.addButton("Not now", QMessageBox.ButtonRole.RejectRole)
-    box.setDefaultButton(install_btn)
-    box.exec()
-
-    if box.clickedButton() != install_btn:
-        _LOGGER.info("pykakasi install declined")
-        return
-
-    mw.progress.start(immediate=True)
     try:
-        _LOGGER.info("Installing pykakasi via pip")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "pykakasi"])
-        tooltip("pykakasi installed. Please restart Anki.")
-        _LOGGER.info("pykakasi installed successfully")
-    except Exception as exc:
-        _LOGGER.exception("pykakasi install failed")
-        tooltip(f"pykakasi install failed: {exc}")
-    finally:
-        mw.progress.finish()
+        # Onigiri is optional; skip silently if not installed.
+        import Onigiri
+    except Exception:
+        _LOGGER.debug("Onigiri not available; skipping sidebar registration")
+        return
+
+    try:
+        # Provide a sidebar entry that triggers a pycmd we handle below.
+        Onigiri.register_sidebar_action(
+            entry_id="ajpc-yomitran.settings",
+            label="Yomitran Settings",
+            command="ajpc_yomitran_open_settings",
+        )
+
+        def _on_js(handled, cmd, context):
+            # Handle the sidebar pycmd and open the settings dialog.
+            if cmd == "ajpc_yomitran_open_settings":
+                open_config()
+                return (True, None)
+            return handled
+
+        # Attach to Anki's webview message hook so the pycmd reaches Python.
+        gui_hooks.webview_did_receive_js_message.append(_on_js)
+        _SIDEBAR_HOOKED = True
+        _LOGGER.debug("Registered Onigiri sidebar action")
+    except Exception:
+        _LOGGER.exception("Failed to register Onigiri sidebar action")
+
 
 
 def _write_local_config(cfg: dict):
+    # Persist config JSON in the add-on folder.
     try:
         path = os.path.join(os.path.dirname(__file__), "config.json")
         with open(path, "w", encoding="utf-8") as f:
@@ -249,7 +284,8 @@ def _write_local_config(cfg: dict):
 
 
 
+# Load config early, then register menu + sidebar hooks.
 get_config()
 init_menu()
+_init_onigiri_sidebar()
 gui_hooks.sync_did_finish.append(on_sync)
-gui_hooks.profile_did_open.append(_prompt_pykakasi_install)
