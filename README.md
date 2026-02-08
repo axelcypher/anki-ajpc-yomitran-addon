@@ -4,6 +4,10 @@ Anki add-on for converting imported Yomitan notes into your own vocabulary note 
 
 Note: This project is not affiliated with or endorsed by Yomitan.
 
+## Requirements
+- `Yomitan` (browser extension) for creating/importing source notes in Anki.
+- `AnkiConnect` add-on in Anki (default local API at `http://127.0.0.1:8765`).
+
 ## Features
 - User-defined categories with filters to select the target note type
 - Per-category field mapping with dynamic source/virtual fields
@@ -19,7 +23,7 @@ Note: This project is not affiliated with or endorsed by Yomitan.
 4) Configure it via `Tools -> AJpC -> Yomitran Settings`.
 
 ## Configuration
-- `config.json` is managed by Anki.
+- `config.json` is managed directly by this add-on (not via Anki's add-on meta config).
 - `config.example.json` shows the default schema.
 
 ### Setup tab
@@ -54,9 +58,6 @@ Example:
 }
 ```
 
-### Debug logging
-Enable debug logging in the settings dialog to write `ajpc-yomitran.log` into the add-on folder.
-
 ## Source fields (typical)
 Examples of fields you might expose in the Setup tab:
 - Vocab, VocabReading, VocabFurigana, VocabAudio, POS
@@ -71,20 +72,6 @@ The default configuration ships with:
 - `SourceNoteLink`: link to the source note
 - `Vocab`: copy of VocabFurigana
 
-## Hepburn dependency
-This add-on bundles `pykakasi` and its dependencies, so no manual installation is required.
-The vendored packages live in `vendor/`.
-
-If the vendored copy is missing or broken, conversion will raise an error.
-
-## Build (.ankiaddon)
-GitHub Actions builds a `.ankiaddon` artifact.
-
-Manual build:
-```
-zip -r ajpc-yomitran_dev.ankiaddon . -x ".git/*" ".github/*" "config.json" "__pycache__/*" "*.pyc" "*.pyo"
-```
-
 ## Notes
 - New notes are added to the currently active deck.
 - Tags from the source field `Tags` are transformed and applied.
@@ -92,6 +79,12 @@ zip -r ajpc-yomitran_dev.ankiaddon . -x ".git/*" ".github/*" "config.json" "__py
   - `_intern::yomitan_export`
   - `_intern::yomitan::processed`
   - `_intern::yomitan::<Vocab>::<NoteID>`
+
+## Hepburn dependency
+This add-on bundles `pykakasi` and its dependencies, so no manual installation is required.
+The vendored packages live in `vendor/`.
+
+If the vendored copy is missing or broken, conversion will raise an error.
 
 ## Licensing
 This project is distributed under GPLv3 (see `LICENSE`).
