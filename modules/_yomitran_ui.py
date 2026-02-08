@@ -16,7 +16,6 @@ from aqt.qt import (
     QLineEdit,
     QPushButton,
     QPlainTextEdit,
-    QSizePolicy,
     QTabWidget,
     QVBoxLayout,
     QWidget,
@@ -25,6 +24,46 @@ from aqt.qt import Qt
 from aqt.utils import tooltip
 
 from ._yomitran_conversion import DEFAULT_FIELD_MAPPING, build_value_sources
+
+
+SETUP_TIPS = {
+    "source_enabled": "Enable this source field for use in mappings and virtual fields.",
+    "source_field": "Raw source field name from the selected Yomitan source note type.",
+    "source_display_label": "Label shown in mapping dropdowns for this source field.",
+    "virtual_id": "Stable internal key used by field mappings.",
+    "virtual_name": "Display name shown in mapping dropdowns.",
+    "virtual_type": (
+        "Transformation type: copy/to_hepburn/to_tag uses Source field; "
+        "fallback uses Primary+Fallback; note_link uses Link label."
+    ),
+    "virtual_source": "Source field consumed by copy/to_hepburn/to_tag.",
+    "virtual_primary": "Primary source field for fallback type.",
+    "virtual_fallback": "Fallback source field used when Primary is empty.",
+    "virtual_link_label": "Link label used for note_link raw links.",
+}
+
+CATEGORY_TIPS = {
+    "category_name": "Display name of this conversion category/tab.",
+    "target_note_type": "Destination note type created from matching source notes.",
+    "filter_source": "Source field used to decide whether this category applies.",
+    "filter_values": "Match values separated by ';' or ','.",
+    "filter_mode": "Contains: partial match. Equals: exact full-value match.",
+    "field_map": "Map each target field to one source/virtual value.",
+}
+
+TAG_TRANSFORM_TIP = (
+    "Tag transform JSON object.\n"
+    "Keys:\n"
+    "- mapping: raw_tag -> final_tag\n"
+    "- drop: list of raw tags to remove\n"
+    "- prefix: prefix for unmapped tags"
+)
+
+CONFIG_TIPS = {
+    "run_on_sync": "Run conversion on sync start.",
+    "run_on_card_added": "Run conversion when new notes/cards are added.",
+    "source_note_type": "Yomitan import source note type used as conversion input.",
+}
 
 
 def _clear_layout(layout):
@@ -38,11 +77,10 @@ def _clear_layout(layout):
             _clear_layout(child_layout)
 
 
-def _info_box(text: str) -> QLabel:
+def _make_label(text: str, tip: str = "") -> QLabel:
     label = QLabel(text)
-    label.setWordWrap(True)
-    label.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
-    label.setStyleSheet("padding: 6px; border: 1px solid #999; border-radius: 4px;")
+    if tip:
+        label.setToolTip(tip)
     return label
 
 
@@ -116,9 +154,9 @@ class SourceFieldsWidget(QWidget):
     def set_fields(self, fields: List[Dict]):
         _clear_layout(self._grid)
         self._rows = []
-        self._grid.addWidget(QLabel("Enabled"), 0, 0)
-        self._grid.addWidget(QLabel("Field"), 0, 1)
-        self._grid.addWidget(QLabel("Display label"), 0, 2)
+        self._grid.addWidget(_make_label("Enabled", SETUP_TIPS["source_enabled"]), 0, 0)
+        self._grid.addWidget(_make_label("Field", SETUP_TIPS["source_field"]), 0, 1)
+        self._grid.addWidget(_make_label("Display label", SETUP_TIPS["source_display_label"]), 0, 2)
 
         for idx, field in enumerate(fields, start=1):
             name = str(field.get("name") or "").strip()
@@ -190,9 +228,9 @@ class VirtualFieldRow(QWidget):
         self.type_combo.setFixedWidth(self._col_width)
         self.remove_btn.setFixedWidth(80)
 
-        layout.addWidget(QLabel("ID"), 0, 0)
-        layout.addWidget(QLabel("Name"), 0, 1)
-        layout.addWidget(QLabel("Type"), 0, 2)
+        layout.addWidget(_make_label("ID", SETUP_TIPS["virtual_id"]), 0, 0)
+        layout.addWidget(_make_label("Name", SETUP_TIPS["virtual_name"]), 0, 1)
+        layout.addWidget(_make_label("Type", SETUP_TIPS["virtual_type"]), 0, 2)
         layout.addWidget(self.id_edit, 1, 0)
         layout.addWidget(self.name_edit, 1, 1)
         layout.addWidget(self.type_combo, 1, 2)
@@ -206,16 +244,20 @@ class VirtualFieldRow(QWidget):
             combo.setFixedWidth(self._col_width)
         self.label_edit.setFixedWidth(self._col_width)
 
-        self.source_label = QLabel("Source field", self)
+        self.source_label = _make_label("Source field", SETUP_TIPS["virtual_source"])
+        self.source_label.setParent(self)
         layout.addWidget(self.source_label, 2, 0)
         layout.addWidget(self.source_combo, 3, 0)
-        self.primary_label = QLabel("Primary", self)
+        self.primary_label = _make_label("Primary", SETUP_TIPS["virtual_primary"])
+        self.primary_label.setParent(self)
         layout.addWidget(self.primary_label, 2, 0)
         layout.addWidget(self.primary_combo, 3, 0)
-        self.fallback_label = QLabel("Fallback", self)
+        self.fallback_label = _make_label("Fallback", SETUP_TIPS["virtual_fallback"])
+        self.fallback_label.setParent(self)
         layout.addWidget(self.fallback_label, 2, 1)
         layout.addWidget(self.fallback_combo, 3, 1)
-        self.link_label = QLabel("Link label", self)
+        self.link_label = _make_label("Link label", SETUP_TIPS["virtual_link_label"])
+        self.link_label.setParent(self)
         layout.addWidget(self.link_label, 2, 0)
         layout.addWidget(self.label_edit, 3, 0)
 
@@ -359,27 +401,23 @@ class SetupTab(QWidget):
         layout.addLayout(row)
 
         source_group = QGroupBox("Source fields", self)
+        source_group.setToolTip(
+            "Configure source fields from the selected Yomitan source note type."
+        )
         source_layout = QVBoxLayout(source_group)
         self.source_fields_widget = SourceFieldsWidget(source_group)
         source_layout.addWidget(self.source_fields_widget)
         row.addWidget(source_group, 3)
 
         virtual_group = QGroupBox("Virtual fields", self)
+        virtual_group.setToolTip(
+            "Define computed values that can be used in category field mappings."
+        )
         virtual_layout = QVBoxLayout(virtual_group)
         self.virtual_fields_widget = VirtualFieldsWidget()
         virtual_layout.addWidget(self.virtual_fields_widget)
         row.addWidget(virtual_group, 2)
         layout.addStretch(1)
-        layout.addWidget(
-            _info_box(
-                "Virtual fields:\n"
-                "- ID: internal key used by field mappings.\n"
-                "- Name: UI label shown in mapping dropdowns.\n"
-                "- Type copy/to_hepburn/to_tag: uses Source field.\n"
-                "- Type fallback: uses Primary, then Fallback when empty.\n"
-                "- Type note_link: creates a raw note link with Link label."
-            )
-        )
 
         self.set_values(cfg)
 
@@ -422,7 +460,8 @@ class CategoryTab(QWidget):
 
         self.name_edit = QLineEdit(str(self._category.get("name") or ""), self)
         self.name_edit.textChanged.connect(self._on_name_changed)
-        form.addRow(QLabel("Category name"), self.name_edit)
+        category_name_label = _make_label("Category name", CATEGORY_TIPS["category_name"])
+        form.addRow(category_name_label, self.name_edit)
 
         self.note_type_combo = QComboBox(self)
         self.note_type_combo.addItem("(none)", None)
@@ -433,7 +472,8 @@ class CategoryTab(QWidget):
             idx = self.note_type_combo.findData(current_id)
             if idx >= 0:
                 self.note_type_combo.setCurrentIndex(idx)
-        form.addRow(QLabel("Target note type"), self.note_type_combo)
+        target_note_type_label = _make_label("Target note type", CATEGORY_TIPS["target_note_type"])
+        form.addRow(target_note_type_label, self.note_type_combo)
 
         self.filter_source_combo = QComboBox(self)
         self.filter_source_combo.addItem("(none)", "")
@@ -450,26 +490,19 @@ class CategoryTab(QWidget):
         self.filter_mode_combo.addItem("Equals", "equals")
         self._set_combo_value(self.filter_mode_combo, filter_cfg.get("mode") or "contains")
 
-        form.addRow(QLabel("Filter source field"), self.filter_source_combo)
-        form.addRow(QLabel("Filter values"), self.filter_values_edit)
-        form.addRow(QLabel("Filter match"), self.filter_mode_combo)
+        filter_source_label = _make_label("Filter source field", CATEGORY_TIPS["filter_source"])
+        filter_values_label = _make_label("Filter values", CATEGORY_TIPS["filter_values"])
+        filter_mode_label = _make_label("Filter match", CATEGORY_TIPS["filter_mode"])
+        form.addRow(filter_source_label, self.filter_source_combo)
+        form.addRow(filter_values_label, self.filter_values_edit)
+        form.addRow(filter_mode_label, self.filter_mode_combo)
 
         layout.addLayout(form)
 
         self.field_map_widget = FieldMapWidget(self)
+        self.field_map_widget.setToolTip(CATEGORY_TIPS["field_map"])
         layout.addWidget(self.field_map_widget)
         layout.addStretch(1)
-        layout.addWidget(
-            _info_box(
-                "Target note type: destination note type created for matching source notes.\n"
-                "Filter source field: source value used for matching (for example PartOfSpeech).\n"
-                "Filter values: one or more values, separated by ';' or ','.\n"
-                "Filter match:\n"
-                "- Contains: any filter value is contained in the source value.\n"
-                "- Equals: source value must exactly match one filter value.\n"
-                "Field map: maps each target field to one source/virtual value.\n"
-            )
-        )
 
         self.note_type_combo.currentIndexChanged.connect(self._refresh_mapping)
         self._refresh_mapping()
@@ -531,18 +564,12 @@ class TagTransformTab(QWidget):
     def __init__(self, current: Dict, parent=None):
         super().__init__(parent)
         layout = QVBoxLayout(self)
-        layout.addWidget(QLabel("Tag transform JSON (mapping / drop)."))
+        tag_label = _make_label("Tag transform JSON (mapping / drop).", TAG_TRANSFORM_TIP)
+        layout.addWidget(tag_label)
         self.editor = QPlainTextEdit(self)
+        self.editor.setToolTip(TAG_TRANSFORM_TIP)
         self.editor.setPlainText(json.dumps(current, ensure_ascii=False, indent=2))
         layout.addWidget(self.editor)
-        layout.addWidget(
-            _info_box(
-                "Tag transform JSON keys:\n"
-                "- mapping: maps incoming raw tags to final tags.\n"
-                "- drop: removes unwanted raw tags before mapping.\n"
-                "- prefix: prepends unmapped tags.\n"
-            )
-        )
 
     def get_value(self) -> Optional[Dict]:
         raw = self.editor.toPlainText().strip()
@@ -569,15 +596,21 @@ class ConfigPanel(QWidget):
 
         root = QVBoxLayout(self)
         self.run_on_sync = QCheckBox("Run on sync")
+        self.run_on_sync.setToolTip(CONFIG_TIPS["run_on_sync"])
         self.run_on_sync.setChecked(bool(cfg.get("run_on_sync", cfg.get("auto_on_sync", True))))
         root.addWidget(self.run_on_sync)
 
         self.run_on_card_added = QCheckBox("Run on card added")
+        self.run_on_card_added.setToolTip(CONFIG_TIPS["run_on_card_added"])
         self.run_on_card_added.setChecked(bool(cfg.get("run_on_card_added", False)))
         root.addWidget(self.run_on_card_added)
 
-        root.addWidget(QLabel("Source note type (Yomitan import):"))
+        source_type_label = _make_label(
+            "Source note type (Yomitan import):", CONFIG_TIPS["source_note_type"]
+        )
+        root.addWidget(source_type_label)
         self.source_selector = QComboBox(self)
+        self.source_selector.setToolTip(CONFIG_TIPS["source_note_type"])
         self.source_selector.addItem("(none)", None)
         for model in note_types:
             self.source_selector.addItem(model["name"], model["id"])
@@ -592,12 +625,6 @@ class ConfigPanel(QWidget):
             if idx >= 0:
                 self.source_selector.setCurrentIndex(idx)
         root.addWidget(self.source_selector)
-        root.addWidget(
-            _info_box(
-                "Source note type: Yomitan import note type used as conversion input."
-            )
-        )
-
         self.tabs = QTabWidget(self)
         self.setup_tab = SetupTab(cfg, self)
         self.tabs.addTab(self.setup_tab, "Setup")
