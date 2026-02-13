@@ -8,3 +8,4 @@ __pycache__/
 .vscode/
 meta.json
 *.log
+*.jsonl

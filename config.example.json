@@ -1,6 +1,7 @@
 {
   "enabled": true,
-  "auto_on_sync": true,
+  "run_on_sync": true,
+  "run_on_card_added": false,
   "source_note_type_id": null,
   "source_fields": [
     {
